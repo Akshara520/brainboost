@@ -105,11 +105,11 @@ def face_image(request):
         # Show message to wait for the camera to come
         #     messages.info(request, "Please wait, camera will come now...")
 
-            if not os.path.exists(r"D:/PTEBB/Capture"):
-                os.makedirs("D:/PTEBB/Capture")
+            if not os.path.exists(r"C:/Users/user/PycharmProjects/brainboost/Capture"):
+                os.makedirs("C:/Users/user/PycharmProjects/brainboost/Capture")
 
             faceCascade = cv2.CascadeClassifier(
-                "D:/PTEBB/haarcascade_frontalface_default.xml")
+                "C:/Users/user/PycharmProjects/brainboost/haarcascade_frontalface_default.xml")
             cam = cv2.VideoCapture(0)
             cam.set(3, 640)
             cam.set(4, 480)
@@ -131,7 +131,7 @@ def face_image(request):
                     # Save the captured image into the images directory
 
                     cv2.imwrite(
-                        "D:/PTEBB/Capture/" + str(
+                        "C:/Users/user/PycharmProjects/brainboost/Capture/" + str(
                             reg_id) + '.' + str(count) + ".jpg", gray[y:y + h, x:x + w])
                     cv2.imshow('image', img)
                 # Press Escape to end the program.
@@ -150,7 +150,7 @@ def face_image(request):
             # # Notify that the camera has stopped and training is going on
             # messages.warning(request, "Training faces... Please Wait...!!!")
 
-            path = "D:/PTEBB/Capture"
+            path = "C:/Users/user/PycharmProjects/brainboost/Capture"
             recognizer = cv2.face.LBPHFaceRecognizer_create()
 
             # Haar cascade file
@@ -178,7 +178,7 @@ def face_image(request):
             print(ids)
             recognizer.train(faces, np.array(ids))
             # Save the model into the current directory.
-            recognizer.write('D:/PTEBB/trainer.yml')
+            recognizer.write('C:/Users/user/PycharmProjects/brainboost/trainer.yml')
 
             # Final message
             # messages.info(request, "Training complete, redirecting to login.")
@@ -230,10 +230,10 @@ def face_identity(request):
     label = ''
     # deep learning code starts
     detector = cv2.CascadeClassifier(
-        r"D:/PTEBB/haarcascade_frontalface_default.xml")
+        r"C:/Users/user/PycharmProjects/brainboost/haarcascade_frontalface_default.xml")
 
     recognizer = cv2.face.LBPHFaceRecognizer_create()
-    recognizer.read("D:/PTEBB/trainer.yml")
+    recognizer.read("C:/Users/user/PycharmProjects/brainboost/trainer.yml")
 
     # Load the image
     cam = cv2.VideoCapture(0)
