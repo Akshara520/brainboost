@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Short Answer</title>
+    <link href="{% static 'css/ssaa.css' %}" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Add Short Answer</h1>
+    </header>
+    <nav>
+        <a href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+        <a href="{% url 's_short_answer_show' %}">Show Short Answer</a>
+        <a href="{% url 'admin_logout' %}">Logout</a>
+    </nav>
+
+    <div class="container">
+        <h1>Add Short Answer</h1>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="audio">Upload Audio</label>
+                <input type="file" id="audio" name="audio" accept="audio/*" required>
+            </div>
+            <div class="form-group">
+                <label for="answer">Answer</label>
+                <input type="text" id="answer" name="answer" placeholder="Enter the answer here..." required></>
+<!--             <textarea id="answer" name="answer" placeholder="Enter the answer here..." required></textarea>-->
+            </div>
+            <button type="submit" class="save-btn">Save</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Read Aloud</title>
+    <link rel="stylesheet" href="{% static 'css/sras.css' %}">
+
+</head>
+<body>
+
+    <div class="header">Show Read Aloud</div>
+
+    <div class="container">
+        <div class="buttons">
+            <button class="admin-btn" onclick="window.location.href='{% url 'admin_dashboard' %}';">Admin Dashboard</button>
+            <button class="add-btn" onclick="window.location.href='{% url 's_read_aloud_add' %}'">Add Read Aloud</button>
+            <button class="logout-btn" onclick="window.location.href='{% url 'admin_logout' %}';">Logout</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Sentence</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r_aloud in read_aloud %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ r_aloud.sentence }}</td>
+                        <td class="action-btns">
+                            <a href="{% url 's_read_aloud_edit' r_aloud.id %}">Edit</a>
+                            <a href="{% url 's_read_aloud_delete' r_aloud.id %}" onclick="return confirm('Are you sure you want to delete this sentence?')">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+body {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 50px;
+}
+
+h1, h5 {
+    text-align: center;
+}
+
+.form-check-label {
+    font-size: 18px;
+}

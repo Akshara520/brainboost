@@ -1,0 +1,75 @@
+body {
+    font-family: None;
+    background: white;
+    color: black;
+    padding: 0px;
+    text-align: center;
+    margin: -19px;
+}
+h1 {
+    background-color: #2f3786;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    font-size: 24px;
+}
+
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.navbar button {
+    background-color: #ffffff;
+    color: black;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.navbar button:hover {
+    background-color: black;
+}
+
+table {
+    width: 95%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.1);
+    color: black;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 0px;
+    border: 1px solid white;
+    text-align: justify;
+}
+
+th {
+    text-align: center;
+    color:white;
+    background-color: #2f3786;
+    height:40px;
+}
+
+tr:nth-child(even) {
+    background: white;
+}
+
+button {
+    background-color: white;
+    color: black;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #d3d3d3;
+}

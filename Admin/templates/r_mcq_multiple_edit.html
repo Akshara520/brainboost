@@ -1,0 +1,73 @@
+{% load static %}
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit MCQ Multiple Question</title>
+    <link rel="stylesheet" href="{% static 'css/rmme.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit MCQ Multiple Question</h1>
+
+        <div class="nav-buttons">
+            <button onclick="window.location.href='{% url 'admin_dashboard' %}';" style="background-color:#519de4">Admin Dashboard</button>
+            <button onclick="window.location.href='{% url 'r_mcq_multiple_show' %}';" style="background-color:#519de4">Show Read MCQ Multiple</button>
+            <button onclick="window.location.href='{% url 'admin_logout' %}';" style="background-color:red">Logout</button>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="passage">Passage: </label>
+            <textarea class="text-area" id="passage" name="passage" required>{{ mcq.passage }}</textarea><br>
+
+            <label>Question:</label>
+            <input type="text" name="question" value="{{ mcq.question }}" required><br>
+
+            <label>Choice 1:</label>
+            <input type="text" name="choice1" value="{{ mcq.choice1 }}" required><br>
+
+            <label>Choice 2:</label>
+            <input type="text" name="choice2" value="{{ mcq.choice2 }}" required><br>
+
+            <label>Choice 3:</label>
+            <input type="text" name="choice3" value="{{ mcq.choice3 }}" required><br>
+
+            <label>Choice 4:</label>
+            <input type="text" name="choice4" value="{{ mcq.choice4 }}" required><br>
+
+            <label>Choice 5:</label>
+            <input type="text" name="choice5" value="{{ mcq.choice5 }}" required><br>
+
+            <label>Answer 1:</label>
+            <select name="answer1" required>
+                {% for i in "12345" %}
+                    <option value="{{ i }}" {% if mcq.answer1 == mcq|get_choice:i %}selected{% endif %}>Choice {{ i }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Answer 2:</label>
+            <select name="answer2" required>
+                {% for i in "12345" %}
+                    <option value="{{ i }}" {% if mcq.answer2 == mcq|get_choice:i %}selected{% endif %}>Choice {{ i }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label>Answer 3:</label>
+            <select name="answer3">
+                <option value="">Select Answer 3 (optional)</option>
+                {% for i in "12345" %}
+                    <option value="{{ i }}" {% if mcq.answer3 == mcq|get_choice:i %}selected{% endif %}>Choice {{ i }}</option>
+                {% endfor %}
+            </select>
+
+            <br><br>
+            <button type="submit" style="background-color:#519de4">Update Question</button>
+        </form>
+    </div>
+</body>
+</html>

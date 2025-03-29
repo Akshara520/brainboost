@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Short Answer</title>
+    <link href="{% static 'css/ssas.css' %}" rel="stylesheet">
+
+</head>
+<body>
+<header>
+    <h1>Show Short Answer</h1>
+</header>
+<nav>
+    <a href="{% url 'admin_dashboard' %}" style="background-color:#519de4">Admin Dashboard</a>
+    <a href="{% url 's_short_answer_add' %}">Add Short Answer</a>
+    <a href="{% url 'admin_logout' %}" style="background-color:red">Logout</a>
+</nav>
+<div class="container">
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Answer</th>
+            <th>Audio</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for short_answer in short_answers %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ short_answer.answer }}</td>
+            <td>
+                {% if short_answer.audio %}
+                <audio controls>
+                    <source src="{{ short_answer.audio.url }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                {% else %}
+                No audio available
+                {% endif %}
+            </td>
+
+            <td>
+                <a href="{% url 's_short_answer_edit' short_answer.id %}" class="action-btn">Edit</a>
+                <a href="{% url 's_short_answer_delete' short_answer.id %}" class="action-btn delete-btn"
+                   onclick="return confirm('Are you sure you want to delete this short answer?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

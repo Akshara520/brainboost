@@ -1,0 +1,138 @@
+/* General Styles */
+:root {
+    --background: #F0F4F8; /* Light blue background */
+    --color: #003366; /* Deep blue for text */
+    --primary-color: #007BFF; /* Bright blue for primary elements */
+    --glass-color: rgba(255, 255, 255, 0.8); /* White glass effect */
+    --hover-color: #0056b3; /* Darker blue hover effect */
+    --sidebar-color: #003366; /* Dark blue for sidebar */
+}
+
+body {
+    display: flex;
+    margin: 0;
+    background-color: var(--background);
+    font-family: Arial, sans-serif;
+    color: var(--color);
+}
+
+/* Side Navigation Bar */
+.sidenav {
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--sidebar-color);
+    overflow-x: hidden;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidenav a {
+    padding: 15px 20px;
+    text-decoration: none;
+    font-size: 1rem;
+    color: white;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.sidenav a:hover {
+    background: var(--hover-color);
+    color: #FFFFFF;
+}
+
+.logout-container {
+    padding: 15px 20px;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--glass-color);
+    color: var(--sidebar-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.logout-btn i {
+    margin-right: 5px;
+}
+
+.logout-btn:hover {
+    background: var(--hover-color);
+    color: #FFFFFF;
+}
+
+/* Main Content */
+.main {
+    margin-left: 250px; /* Same as the width of the sidenav */
+    padding: 20px;
+    width: calc(100% - 250px);
+}
+
+/* Basic page container */
+.container {
+   width: 100%;
+   position:relative;
+    max-width: 1200px;
+    background: var(--glass-color);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    animation: slideUp 1s ease-in-out;
+}
+
+/* Page title */
+/* Center and style the h2 heading */
+.page-title {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--color); /* Use the deep blue color from the palette */
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: var(--color); /* Light glass effect background */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table styling */
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: var(--glass-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.student-table th, .student-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.student-table th {
+    background-color: var(--color);
+    color: white;
+    font-weight: bold;
+}
+
+.student-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.student-table tr:hover {
+    background-color: #f1f1f1;
+}

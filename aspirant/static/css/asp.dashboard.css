@@ -1,0 +1,66 @@
+/* Custom CSS for Admin Dashboard */
+
+/* Customize the container's background */
+.container {
+    background-color: none;
+}
+
+/* Customizing heading styles */
+h1 {
+    color: #ffffff; /* Change to your desired color */
+    font-weight: bold;
+    font-size: 36px;
+}
+
+/* Styling the buttons */
+.btn {
+    font-size: 16px;
+    padding: 10px 20px;
+}
+
+/* Customize background color of the login/registration buttons */
+#auth-buttons .btn-primary {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+#auth-buttons .btn-secondary {
+    background-color: #6c757d;
+    border-color: #5a6268;
+}
+
+/* Customize the dropdowns */
+.select {
+    font-size: 16px;
+    padding: 8px 12px;
+    background-color: #f1f1f1;
+    border-color: #ced4da;
+}
+
+/* Customize the last row buttons */
+#last-row .btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+#last-row .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+/* Style for hiding elements that are initially hidden */
+.d-none {
+    display: none;
+}
+
+/* Custom padding for rows */
+.row {
+    margin-bottom: 20px;
+}
+
+/* Welcome text styles */
+.welcome {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    color:#ffd600;
+}

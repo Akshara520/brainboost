@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Correct Summary</title>
+    <link rel="stylesheet" href="{% static 'css/lcss.css' %}">
+</head>
+<body class="gradient-background">
+    <div class="container">
+        <h1 class="h1">Show Correct Summary</h1>
+
+        <div class="button-group">
+            <button onclick="location.href='{% url 'admin_dashboard' %}'" style="background-color:#519de4">Admin Dashboard</button>
+            <button onclick="location.href='{% url 'l_correct_summary_add' %}'" style="background-color:green">Add Correct Summary</button>
+            <button onclick="location.href='{% url 'admin_logout' %}'" style="background-color:red">Logout</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Audio</th>
+                    <th>Choice 1</th>
+                    <th>Choice 2</th>
+                    <th>Choice 3</th>
+                    <th>Choice 4</th>
+                    <th>Answer</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for question in questions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <audio controls>
+                            <source src="{{ question.audio.url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>{{ question.choice1 }}</td>
+                    <td>{{ question.choice2 }}</td>
+                    <td>{{ question.choice3 }}</td>
+                    <td>{{ question.choice4 }}</td>
+                    <td>{{ question.answer }}</td>
+                    <td>
+                        <button onclick="location.href='{% url 'l_correct_summary_edit' question.id %}'">Edit</button>
+                        <button onclick="if(confirm('Are you sure you want to delete this question?')) { window.location.href='{% url 'l_correct_summary_delete' question.id %}'; }">Delete</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8">No Data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

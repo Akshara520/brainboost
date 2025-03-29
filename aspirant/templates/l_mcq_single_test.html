@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listening Question</title>
+    <link rel="stylesheet" href="{% static 'css/srat.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header {
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress {
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .question-btn {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        .question-btn:hover {
+            background: #357ABD;
+        }
+
+        .timer {
+            font-size: 1.2rem;
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .radio-group {
+            text-align: left;
+            margin-top: 15px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .radio-group div {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between radio and label */
+            padding: 12px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s, border 0.3s;
+            border: 2px solid transparent;
+            margin-bottom: 8px;
+        }
+
+        /* Submit Button Always Visible but Initially Disabled */
+        .submit-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: not-allowed;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            width: 100%;
+            opacity: 0.6; /* Initially faded */
+        }
+
+        .submit-btn.enabled {
+            cursor: pointer;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">🎧 Listening Question</div>
+        <div id="timer" class="timer" style="display: none;">Time left: 60s</div>
+        <div class="progress">Question {{ current_q_number }} of {{ total_questions }}</div>
+
+        <button id="question-btn" class="question-btn" onclick="playAudio()">
+            <i class="fas fa-play"></i> Play Question
+        </button>
+
+        <audio id="question-audio">
+            <source src="{{ question.audio.url }}" type="audio/mpeg">
+            Your browser does not support the audio tag.
+        </audio>
+
+        <div class="question">{{question.question}}</div>
+
+        <form id="submission-form" method="POST" action="{% url 'l_mcq_single_submit' %}">
+            {% csrf_token %}
+            <input type="hidden" name="q_id" value="{{ question.id }}">
+
+            <div class="radio-group">
+                    <div>
+                        <input type="radio" id="option1" name="selected_option" value="{{question.choice1}}">
+                        <label for="option1">{{question.choice1}}</label>
+                    </div>
+
+                    <div>
+                        <input type="radio" id="option2" name="selected_option" value="{{question.choice2}}">
+                        <label for="option2">{{question.choice2}}</label>
+                    </div>
+
+                    <div>
+                        <input type="radio" id="option3" name="selected_option" value="{{question.choice3}}">
+                        <label for="option3">{{question.choice3}}</label>
+                    </div>
+
+                    <div>
+                        <input type="radio" id="option4" name="selected_option" value="{{question.choice4}}">
+                        <label for="option4">{{question.choice4}}</label>
+                    </div>
+                </div>
+
+            <button id="submit-btn" class="submit-btn" type="submit" disabled>
+                <i class="fas fa-paper-plane"></i> Submit
+            </button>
+        </form>
+    </div>
+
+    <script>
+        let timer;
+        let timeLeft = 60;
+        let submitBtn = document.getElementById("submit-btn");
+
+        function playAudio() {
+            let audio = document.getElementById("question-audio");
+            audio.play();
+
+            document.getElementById("timer").style.display = "block";
+            document.getElementById("timer").innerText = `Time left: ${timeLeft}s`;
+
+            clearInterval(timer);
+            timeLeft = 60;
+            timer = setInterval(updateTimer, 1000);
+
+            // Enable submit button after audio starts playing
+            submitBtn.disabled = false;
+            submitBtn.classList.add("enabled");
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            document.getElementById("timer").innerText = `Time left: ${timeLeft}s`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                document.getElementById("submission-form").submit();
+            }
+        }
+
+        // Ensure submit button is always visible but only enabled after playing audio
+        document.querySelectorAll("input[name='selected_option']").forEach(option => {
+            option.addEventListener("change", function() {
+                if (!submitBtn.classList.contains("enabled")) {
+                    submitBtn.classList.add("enabled");
+                    submitBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

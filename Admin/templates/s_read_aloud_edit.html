@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Read Aloud</title>
+    <link rel="stylesheet" href="{% static 'css/srae.css' %}">
+</head>
+<body>
+
+    <div class="header">Edit Read Aloud</div>
+
+    <div class="container">
+        <div class="buttons">
+            <button class="admin-btn" onclick="window.location.href='{% url 'admin_dashboard' %}';">Admin Dashboard</button>
+            <button class="show-btn" onclick="window.location.href='{% url 's_read_aloud_show' %}';">Show Read Aloud</button>
+            <button class="logout-btn" onclick="window.location.href='{% url 'admin_logout' %}';">Logout</button>
+        </div>
+
+        <form method="post" action="{% url 's_read_aloud_edit' sentence.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="sentence">Edit Sentence:</label>
+                <input type="text" id="sentence" name="sentence" value="{{ sentence.sentence }}" required>
+            </div>
+            <button type="submit" class="save-btn">Update</button>
+        </form>
+    </div>
+
+</body>
+</html>

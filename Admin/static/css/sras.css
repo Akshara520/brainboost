@@ -1,0 +1,160 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+.header {
+    background-color: #2f3786;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    font-size: 24px;
+}
+
+.container {
+    max-width: 1180px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.buttons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.buttons button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buttons .admin-btn {
+    background-color: #007BFF;
+    color: white;
+}
+
+/*
+.buttons .show-btn {
+    background-color: #28A745;
+    color: white;
+}
+*/
+
+
+.buttons .logout-btn {
+    background-color: #DC3545;
+    color: white;
+}
+
+.buttons button:hover {
+    opacity: 0.9;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+td {
+    padding: 12px;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+td:nth-child(2) {
+    width: 1000px; /* Fixed width for the Sentence column */
+    text-align: justify;
+    word-wrap: break-word; /* Allow breaking of long words */
+    word-break: break-word; /* Ensure long words break */
+    white-space: normal; /* Enable wrapping */
+}
+
+td:nth-child(3), th:nth-child(3) {
+    width: 100px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+td:nth-child(1), th:nth-child(1) {
+    width: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.action-btns {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 8px;
+    align-items: flex-start;
+    align-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+}
+
+.action-btns a {
+/*
+    margin: 0 5px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+*/
+    display: inline-block;
+    width: 70px;  /* Set a fixed width for buttons */
+    text-align: center;
+    padding: 6px 0;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.action-btns a:hover {
+    background-color: #0056b3;
+}
+
+.add-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+    background-color: #45a049;
+}

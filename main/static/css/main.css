@@ -1,0 +1,205 @@
+/* Root theme colors */
+:root {
+    --background: #d3d3d3;
+    --color: #000000;
+    --primary-color: #5A5A8C;
+    --hover-color: #333;
+    --animation-duration: 0.5s;
+}
+
+
+body {
+    background: url('../images/home1.jpg?v=2') no-repeat center top 175px fixed;
+    background-size: 50%;
+    color: var(--color);
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 20px;
+    animation: fadeIn var(--animation-duration) ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.title {
+    font-size: 3rem;
+    color: var(--primary-color);
+    animation: slideDown 1s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    animation: fadeIn var(--animation-duration) ease-in;
+}
+
+/* Button Styles */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.role-btn {
+    text-decoration: none;
+    background: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+}
+
+.role-btn:hover {
+    background: var(--hover-color);
+    transform: scale(1.05);
+}
+
+/* Illustration Section */
+.admin-section, .aspirant-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 20px;
+    animation: fadeInUp var(--animation-duration) ease-in;
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Additional Animations */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .title {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+    }
+
+    .role-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Card Carousel */
+/* Card Carousel (Aligned to the Side) */
+.card-carousel {
+    width: 30%; /* Adjust width as needed */
+    margin-left: auto; /* Push cards to the right */
+    margin-top: -100px; /* Move it upwards (adjust this value as needed) */
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative; /* Ensure it stays in place */
+    z-index: 1; /* Bring it above the background */
+}
+
+.cards-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.card {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.card.active {
+    opacity: 1;
+}
+
+.card h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.card ul {
+    text-align: left;
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+/* Navigation Dots */
+.nav-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.dot.active {
+    opacity: 1;
+}
+
+.dot:hover {
+    opacity: 1;
+}
+

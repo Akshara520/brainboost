@@ -1,0 +1,232 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Short Answer</title>
+    <link rel="stylesheet" href="{% static 'css/srat.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .header {
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header i {
+            color: #667eea;
+        }
+
+        .progress {
+            color: #718096;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .question-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .question-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 2rem;
+        }
+
+        .record-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .record-btn.recording {
+            background: #fc8181;
+            color: white;
+            border-color: #fc8181;
+            animation: pulse 1.5s infinite;
+        }
+
+        .submit-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 20px; border-radius: 15px; }
+            .header { font-size: 1.75rem; }
+            .question-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">📖 Short Answer</div>
+        <div class="progress">Question {{ current_q_number }} of {{ total_questions }}</div>
+
+        <button id="question-btn" class="question-btn"><i class="fas fa-play"></i> Play Question</button>
+
+        <audio id="question-audio">
+            <source src="{{ question.audio.url }}" type="audio/mpeg">
+            Your browser does not support the audio tag.
+        </audio>
+
+        <div id="timer" class="timer">⏳ Time Remaining: <span id="time-left">20</span>s</div>
+
+        <form id="submission-form" method="POST" action="{% url 'short_answer_submit' %}">
+            {% csrf_token %}
+            <input type="hidden" name="q_id" value="{{ question.id }}">
+            <input type="hidden" id="user_text" name="user_text">
+
+            <div class="button-container">
+                <button id="record-btn" class="record-btn" type="button"><i class="fas fa-microphone"></i> Start Recording</button>
+                <button id="submit-btn" class="submit-btn" type="submit" disabled><i class="fas fa-paper-plane"></i> Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let timer, timeLeft = 20, isRecording = false, recognition, finalTranscript = "";
+
+        function startTimer() {
+            if (timer) return;
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById("time-left").innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    stopRecording();
+                    document.getElementById('submission-form').submit();
+                }
+            }, 1000);
+        }
+
+        function startRecording() {
+            if (isRecording) return;
+            isRecording = true;
+            document.getElementById("record-btn").classList.add("recording");
+            document.getElementById("submit-btn").disabled = false;
+
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+
+            recognition.onresult = (event) => {
+                finalTranscript = event.results[0][0].transcript;
+                document.getElementById("user_text").value = finalTranscript.trim();
+            };
+
+            recognition.onerror = (event) => console.error("Speech Error:", event.error);
+            recognition.onend = stopRecording;
+            recognition.start();
+        }
+
+        function stopRecording() {
+            if (recognition) recognition.stop();
+            isRecording = false;
+            document.getElementById("record-btn").classList.remove("recording");
+        }
+
+        document.getElementById("question-btn").addEventListener("click", () => {
+            document.getElementById("question-audio").play();
+            startTimer();
+        });
+
+        document.getElementById("record-btn").addEventListener("click", startRecording);
+
+        document.getElementById("submission-form").addEventListener('submit', () => {
+            clearInterval(timer);
+            stopRecording();
+        });
+    </script>
+
+</body>
+</html>

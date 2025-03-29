@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listening MCQ Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+            color: white;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            padding: 30px;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            color: black;
+            position: relative;
+        }
+        .timer {
+            font-size: 16px;
+            font-weight: bold;
+            background: #ff5733;
+            padding: 6px 12px;
+            border-radius: 6px;
+            color: white;
+            display: inline-block;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+        }
+        .audio-player {
+            margin: 10px auto;
+            background: #e0f7fa;
+            padding: 10px;
+            border-radius: 10px;
+            width: 290px; /* Reduced width */
+        }
+        .passage {
+            font-size: 16px; /* Increased font size */
+            background: #ffeb99; /* Highlighted with a soft yellow background */
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .options label {
+            display: block;
+            padding: 12px;
+            margin: 6px 0;
+            background: #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .options label:hover {
+            background: #bbb;
+        }
+        .option input {
+            width: 90%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .submit-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .submit-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Fill in the Blanks</h2>
+        <div class="timer" id="timer">02:00 min</div>
+
+        <p>Question {{ current_q_number }} of {{ total_questions }}</p>
+
+        <div class="audio-player">
+            <audio controls>
+                <source src="{{ question.audio.url }}" type="audio/mp3">
+                Your browser does not support the audio tag.
+            </audio>
+        </div>
+
+        <p class="passage">{{ question.passage }}</p>
+
+        <form id="quiz-form" method="POST" action="{% url 'fill_in_blank_submit' %}">
+            {% csrf_token %}
+            <input type="hidden" name="question_id" value="{{ question.id }}">
+        <div class="option">
+            <div>
+                <label for="blank1">Blank 1</label>
+                <input id="blank1" name="blank1" placeholder="Enter your answer">
+            </div>
+
+            <div>
+                <label for="blank2">Blank 2</label>
+                <input id="blank2" name="blank2" placeholder="Enter your answer">
+            </div>
+
+            <div>
+                <label for="blank3">Blank 3</label>
+                <input id="blank3" name="blank3" placeholder="Enter your answer">
+            </div>
+
+            <div>
+                <label for="blank4">Blank 4</label>
+                <input id="blank4" name="blank4" placeholder="Enter your answer">
+            </div>
+
+            <div>
+                <label for="blank5">Blank 5</label>
+                <input id="blank5" name="blank5" placeholder="Enter your answer">
+            </div>
+        </div>
+
+            <button type="submit" class="submit-btn">Submit Answer</button>
+        </form>
+    </div>
+
+    <script>
+        let timeLeft = 120; // 120 seconds
+
+        function updateTimer() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById("timer").innerText =
+                `${minutes}:${seconds < 10 ? '0' : ''}${seconds} min`;
+
+            if (timeLeft <= 0) {
+                document.getElementById("quiz-form").submit();
+            } else {
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            updateTimer();
+        });
+
+    </script>
+
+</body>
+</html>

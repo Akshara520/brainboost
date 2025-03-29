@@ -1,0 +1,114 @@
+body {
+    font-family: Arial, sans-serif;
+    background: white;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+   max-width: 1180px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h1 {
+    background-color: #2f3786;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    font-size: 24px;
+}
+
+.buttons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.buttons button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color:white;
+    transition: background-color 0.3s ease;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: justify;
+}
+
+th {
+    background-color: #2f3786;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+a {
+    color: #ff6f61;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.action-btns {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 8px;
+    align-items: flex-start;
+    align-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+}
+
+.action-btns a {
+/*
+    margin: 0 5px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+*/
+    display: inline-block;
+    width: 70px;  /* Set a fixed width for buttons */
+    text-align: center;
+    padding: 6px 0;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.action-btns a:hover {
+    background-color: #0056b3;
+}

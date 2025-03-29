@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show MCQ Multiple Questions</title>
+    <link rel="stylesheet" href="{% static 'css/rmms.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Show MCQ Multiple Questions</h1>
+
+        <div class="nav-buttons">
+            <button onclick="window.location.href='{% url 'admin_dashboard' %}';" style="background-color:#519de4">Admin Dashboard</button>
+            <button onclick="window.location.href='{% url 'r_mcq_multiple_add' %}';">Add Read MCQ Multiple</button>
+            <button onclick="window.location.href='{% url 'admin_logout' %}';" style="background-color:red">Logout</button>
+        </div>
+
+        <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>Passage</th>
+                <th>Question</th>
+                <th>Choice 1</th>
+                <th>Choice 2</th>
+                <th>Choice 3</th>
+                <th>Choice 4</th>
+                <th>Choice 5</th>
+                <th>Answer 1</th>
+                <th>Answer 2</th>
+                <th>Answer 3</th>
+                <th>Action</th>
+            </tr>
+            {% for mcq in mcq %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ mcq.passage }}</td>
+                <td>{{ mcq.question }}</td>
+                <td>{{ mcq.choice1 }}</td>
+                <td>{{ mcq.choice2 }}</td>
+                <td>{{ mcq.choice3 }}</td>
+                <td>{{ mcq.choice4 }}</td>
+                <td>{{ mcq.choice5 }}</td>
+                <td>{{ mcq.answer1 }}</td>
+                <td>{{ mcq.answer2 }}</td>
+                <td>{{ mcq.answer3|default:"-" }}</td>
+                <td>
+                    <button onclick="window.location.href='{% url 'r_mcq_multiple_edit' mcq.id %}';">Edit</button><br><br>
+                    <button onclick="if(confirm('Are you sure you want to delete this question?')) { window.location.href='{% url 'r_mcq_multiple_delete' mcq.id %}'; }">Delete</button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="11">No MCQ questions available.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

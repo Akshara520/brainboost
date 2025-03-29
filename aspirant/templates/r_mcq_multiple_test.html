@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading MCQ Quiz</title>
+    <style>
+        body {
+            background: white;
+            color: black;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px; /* Increased width */
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer {
+            text-align: right;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: red;
+        }
+
+        .passage {
+            background-color: #bde1e6;
+            color: black;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: left;
+            text-size:10px;
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .option-item {
+            background-color: white;
+            color: black;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .option-item input {
+            margin-right: 10px;
+            width: 12px;
+            height: 10px;
+        }
+
+        /* Highlight selected options */
+        .selected {
+            background-color:yellow;
+
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="timer">Time Left: <span id="time">2:00</span></div>
+
+        <h1>Reading MCQ Quiz</h1>
+
+        <div class="passage">
+            <p>{{ passage }}</p>  <!-- Dynamic passage from Django -->
+        </div>
+
+        <h3 id="question">{{ question }}</h3>  <!-- Dynamic question -->
+
+        <form id="quizForm" method="POST" action="{% url 'submit_mcq' %}">
+            {% csrf_token %}
+            <input type="hidden" name="passage_id" value="{{ passage_id }}">
+
+            <ul class="options">
+                {% for choice in choices %}
+                <li class="option-item" onclick="toggleSelection(this)">
+                    <input type="checkbox" name="selected_choices" value="{{ choice }}">
+                    <label>{{ forloop.counter }}. {{ choice }}</label>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        let timeLeft = 120;  // 2 minutes
+
+        function updateTimer() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById("time").innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (timeLeft > 0) {
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                document.getElementById("quizForm").submit();  // Auto-submit when timer ends
+            }
+        }
+        updateTimer();
+
+        function toggleSelection(element) {
+            let checkbox = element.querySelector("input[type='checkbox']");
+            checkbox.checked = !checkbox.checked;
+
+            if (checkbox.checked) {
+                element.classList.add("selected");
+            } else {
+                element.classList.remove("selected");
+            }
+        }
+    </script>
+
+</body>
+</html>

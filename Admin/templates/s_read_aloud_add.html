@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Read Aloud</title>
+    <link rel="stylesheet" href="{% static 'css/sraa.css' %}">
+
+</head>
+<body>
+
+    <div class="header">Add Read Aloud</div>
+    <br><br>
+    <div class="container">
+        <div class="buttons">
+            <button class="admin-btn" onclick="window.location.href='{% url 'admin_dashboard' %}';">Admin Dashboard</button>
+            <button class="show-btn" onclick="window.location.href='{% url 's_read_aloud_show' %}';">Show Read Aloud</button>
+            <button class="logout-btn" onclick="window.location.href='{% url 'admin_logout' %}';">Logout</button>
+        </div>
+        <br><br>
+        <form method="post" action="{% url 's_read_aloud_add' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="sentence">Enter Sentence:</label>
+<!--                <textarea id="sentence" name="sentence" placeholder="Enter the sentence here..." required></textarea>-->
+             <input type="text" id="sentence" name="sentence" placeholder="Type your sentence here..." required>
+            </div>
+            <button type="submit" class="save-btn">Save</button>
+        </form>
+    </div>
+
+</body>
+</html>

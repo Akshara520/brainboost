@@ -1,0 +1,58 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit MCQ Single Question</title>
+    <link rel="stylesheet" href="{% static 'css/lmse.css' %}">
+</head>
+<body class="gradient-background">
+    <div class="container">
+        <h1>Edit MCQ Single Question</h1>
+
+        <div class="button-group">
+            <button onclick="location.href='{% url 'admin_dashboard' %}'">Admin Dashboard</button>
+            <button onclick="location.href='{% url 'l_mcq_single_show' %}'">Show Listen MCQ Single</button>
+            <button onclick="location.href='{% url 'admin_logout' %}'">Logout</button>
+        </div>
+
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="audio">Audio Input:</label>
+            <input type="file" name="audio" accept="audio/*">
+            <p>Current Audio:</p>
+            <audio controls>
+                <source src="{{ question.audio.url }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio><br>
+
+            <label for="question">Question:</label>
+            <input type="text" name="question" value="{{ question.question }}" required><br>
+
+            <label for="choice1">Choice 1:</label>
+            <input type="text" name="choice1" value="{{ question.choice1 }}" required><br>
+
+            <label for="choice2">Choice 2:</label>
+            <input type="text" name="choice2" value="{{ question.choice2 }}" required><br>
+
+            <label for="choice3">Choice 3:</label>
+            <input type="text" name="choice3" value="{{ question.choice3 }}" required><br>
+
+            <label for="choice4">Choice 4:</label>
+            <input type="text" name="choice4" value="{{ question.choice4 }}" required><br>
+
+            <label for="answer">Answer:</label>
+            <select name="answer" required>
+                <option value="choice1" {% if question.answer == question.choice1 %}selected{% endif %}>Choice 1</option>
+                <option value="choice2" {% if question.answer == question.choice2 %}selected{% endif %}>Choice 2</option>
+                <option value="choice3" {% if question.answer == question.choice3 %}selected{% endif %}>Choice 3</option>
+                <option value="choice4" {% if question.answer == question.choice4 %}selected{% endif %}>Choice 4</option>
+            </select><br>
+
+            <button type="submit">Update Question</button>
+        </form>
+    </div>
+</body>
+</html>

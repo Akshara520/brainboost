@@ -1,0 +1,70 @@
+body.gradient-background {
+    background: #F0F4F8; /* Light blue background */
+    font-family: emoji;
+    padding: 20px;
+    color: #003366; /* Deep blue for text */
+}
+
+.container {
+    background: var(--glass-color);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 650px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    background-color: #2f3786;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    font-size: 24px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--hover-color);
+}
+
+form label {
+    display: block;
+    margin: 10px 0 5px;
+    color: var(--color);
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="file"],
+form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+form button {
+    width: 100%;
+    background-color: var(--primary-color);
+}
+
+form button:hover {
+    background-color: var(--hover-color);
+}

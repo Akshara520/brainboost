@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Summarize Passage</title>
+    <link rel="stylesheet" href="{% static 'css/wspe.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="center">Edit Summarize Passage</h1>
+
+        <div class="button-container">
+            <a href="{% url 'admin_dashboard' %}" class="button">Admin Dashboard</a>
+            <a href="{% url 'w_summarize_passage_show' %}" class="button">Show Summarize Passage</a>
+            <a href="{% url 'admin_logout' %}" class="button">Logout</a>
+        </div>
+
+        <form method="POST" action="{% url 'w_summarize_passage_edit' summarize_passage.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="passage">Passage</label>
+                <textarea id="passage" name="passage" required>{{ summarize_passage.passage }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="keywords">Keywords</label>
+                <textarea id="keywords" name="keywords" required>{{ summarize_passage.keywords }}</textarea>
+            </div>
+            <button type="submit" class="save-button">Save</button>
+        </form>
+    </div>
+</body>
+</html>

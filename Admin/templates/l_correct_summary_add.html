@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Correct Summary</title>
+    <link rel="stylesheet" href="{% static 'css/lcsa.css' %}">
+</head>
+<body class="gradient-background">
+<div class="container">
+    <h1>Add Correct Summary</h1>
+
+    <div class="button-group">
+        <button onclick="location.href='{% url 'admin_dashboard' %}'" style="background-color:#519de4">Admin Dashboard</button>
+        <button onclick="location.href='{% url 'l_correct_summary_show' %}'" style="background-color:green">Show Correct Summary</button>
+        <button onclick="location.href='{% url 'admin_logout' %}'" style="background-color:red">Logout</button>
+    </div>
+
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="audio">Audio Input:</label>
+        <input type="file" name="audio" accept="audio/*" required><br>
+
+        <label for="choice1">Choice 1:</label>
+        <input type="text" name="choice1" required><br>
+
+        <label for="choice2">Choice 2:</label>
+        <input type="text" name="choice2" required><br>
+
+        <label for="choice3">Choice 3:</label>
+        <input type="text" name="choice3" required><br>
+
+        <label for="choice4">Choice 4:</label>
+        <input type="text" name="choice4" required><br>
+
+        <label for="answer">Answer:</label>
+        <select name="answer" required>
+            <option value="choice1">Choice 1</option>
+            <option value="choice2">Choice 2</option>
+            <option value="choice3">Choice 3</option>
+            <option value="choice4">Choice 4</option>
+        </select><br>
+
+        <button type="submit" style="background-color:#519de4" >Save Question</button>
+    </form>
+</div>
+</body>
+</html>

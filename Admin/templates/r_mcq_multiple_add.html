@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add MCQ Multiple Question</title>
+    <link rel="stylesheet" href="{% static 'css/rmma.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Add MCQ Multiple Question</h1>
+
+        <div class="nav-buttons">
+            <button onclick="window.location.href='{% url 'admin_dashboard' %}';" style="background-color:#519de4">Admin Dashboard</button>
+            <button onclick="window.location.href='{% url 'r_mcq_multiple_show' %}';" style="background-color:#519de4">Show Read MCQ Multiple</button>
+            <button onclick="window.location.href='{% url 'admin_logout' %}';" style="background-color:red">Logout</button>
+
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="passage">Passage: </label>
+            <textarea class="text-area" id="passage" name="passage" placeholder="Add the passage" required></textarea><br>
+
+            <label>Question:</label>
+            <input type="text" name="question" required><br>
+
+            <label>Choice 1:</label>
+            <input type="text" name="choice1" required><br>
+
+            <label>Choice 2:</label>
+            <input type="text" name="choice2" required><br>
+
+            <label>Choice 3:</label>
+            <input type="text" name="choice3" required><br>
+
+            <label>Choice 4:</label>
+            <input type="text" name="choice4" required><br>
+
+            <label>Choice 5:</label>
+            <input type="text" name="choice5" required><br>
+
+            <label>Answer 1:</label>
+            <select name="answer1" required>
+                <option value="">Select Answer 1</option>
+                <option value="1">Choice 1</option>
+                <option value="2">Choice 2</option>
+                <option value="3">Choice 3</option>
+                <option value="4">Choice 4</option>
+                <option value="5">Choice 5</option>
+            </select>
+
+            <label>Answer 2:</label>
+            <select name="answer2" required>
+                <option value="">Select Answer 2</option>
+                <option value="1">Choice 1</option>
+                <option value="2">Choice 2</option>
+                <option value="3">Choice 3</option>
+                <option value="4">Choice 4</option>
+                <option value="5">Choice 5</option>
+            </select><br>
+
+            <label>Answer 3:</label>
+            <select name="answer3" required>
+                <option value="">Select Answer 3</option>
+                <option value="1">Choice 1</option>
+                <option value="2">Choice 2</option>
+                <option value="3">Choice 3</option>
+                <option value="4">Choice 4</option>
+                <option value="5">Choice 5</option>
+                <option value="">''</option>
+            </select>
+            <br><br>
+            <button type="submit" style="background-color:#519de4;width:100px;">Add Question</button>
+        </form>
+    </div>
+</body>
+</html>

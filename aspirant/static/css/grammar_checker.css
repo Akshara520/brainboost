@@ -1,0 +1,147 @@
+/* General container styling */
+.grammar-checker-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Input area styling */
+.input-area textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  resize: vertical;
+  outline: none;
+}
+
+/* Buttons styling */
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.controls button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#checkButton {
+  background-color: #007bff;
+  color: white;
+}
+
+#checkButton:hover {
+  background-color: #0056b3;
+}
+
+#clearButton {
+  background-color: #f44336;
+  color: white;
+}
+
+#clearButton:hover {
+  background-color: #c62828;
+}
+
+/* Results section */
+.results-area {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+/* Error summary styling */
+.summary {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  padding: 10px 0;
+}
+
+/* Statistics panel */
+.stats-panel {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.stat-item {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Error item styling */
+.error-item {
+  background: white;
+  border-left: 5px solid #ff4d4d;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.error-type {
+  font-weight: bold;
+  color: #ff4d4d;
+}
+
+.suggestion {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.explanation {
+  font-size: 14px;
+  color: #555;
+  background: #f8f9fa;
+  padding: 5px;
+  border-radius: 3px;
+  margin-top: 5px;
+}
+
+/* Highlight errors */
+.highlight {
+  background-color: #ffecb3;
+  padding: 0 3px;
+  border-radius: 3px;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .grammar-checker-container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .stats-panel {
+    flex-direction: column;
+  }
+}

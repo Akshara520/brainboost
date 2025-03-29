@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Fill Blank Questions</title>
+    <link rel="stylesheet" href="{% static 'css/lfba.css' %}">
+</head>
+<body>
+<h1>Add Fill Blank Questions</h1>
+<div class="navbar">
+    <button onclick="window.location.href='{% url 'admin_dashboard' %}';">Admin Dashboard</button>
+    <button onclick="window.location.href='{% url 'admin_dashboard' %}';">Show Fill Blank Questions</button>
+    <button onclick="window.location.href='{% url 'admin_logout' %}';">Logout</button>
+</div>
+
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label>Audio Input:</label><br>
+    <input type="file" name="audio" accept="audio/*" required><br><br>
+
+    <label>Passage (use [[blank1]], [[blank2]], etc.):</label><br>
+    <textarea name="passage" rows="6" cols="60" required></textarea><br><br>
+
+    <label>Answers for the 5 Blanks:</label><br>
+    <input type="text" name="answer1" placeholder="Answer for [[blank1]]" required><br>
+    <input type="text" name="answer2" placeholder="Answer for [[blank2]]" required><br>
+    <input type="text" name="answer3" placeholder="Answer for [[blank3]]" required><br>
+    <input type="text" name="answer4" placeholder="Answer for [[blank4]]" required><br>
+    <input type="text" name="answer5" placeholder="Answer for [[blank5]]" required><br><br>
+
+    <button type="submit">Add Question</button>
+</form>
+</body>
+</html>

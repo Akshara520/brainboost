@@ -1,0 +1,124 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read Aloud Test</title>
+    <link rel="stylesheet" href="{% static 'css/srat.css' %}">
+    <!-- (Keep the existing CSS styles unchanged) -->
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #007BFF;
+       }
+        .record-btn {
+        background-color: #007BFF;
+        color: white;
+    }
+
+
+    </style>
+</head>
+<body>
+     <div class="container">
+        <div class="header">📖 Read Aloud Test</div>
+        <div class="progress">Question {{ current_q_number }} of {{ total_questions }}</div>
+        <div id="sentence-container" class="sentence-box">{{ question.sentence }}</div>
+        <div id="timer" class="timer">⏳ Time Remaining: 60s</div>
+
+        <form id="submission-form" method="POST" action="{% url 'submit_text' %}">
+            {% csrf_token %}
+            <input type="hidden" name="q_id" value="{{ question.id }}">
+            <input type="hidden" name="sentence" value="{{ question.sentence }}">
+            <input type="hidden" id="user_text" name="user_text">
+
+            <div class="button-container">
+                <button id="record-btn" class="record-btn" type="button" onclick="startRecording()">🎙 Start Recording</button>
+                <button id="submit-btn" class="submit-btn" type="submit" disabled>✔ Submit</button>
+            </div>
+        </form>
+    </div>
+
+ <script>
+    let timer;
+    let timeLeft = 60;
+    let isRecording = false;
+    let recognition;
+    let finalTranscript = "";
+
+    function startTimer() {
+        document.getElementById("submit-btn").disabled = false;
+        document.getElementById("submit-btn").classList.add("active");
+
+        timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById("timer").innerText = `⏳ Time Remaining: ${timeLeft}s`;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                stopRecording(); // Stop recording when timer ends
+                document.getElementById('submission-form').submit();
+            }
+        }, 1000);
+    }
+
+    function startRecording() {
+        if (!isRecording) {
+            isRecording = true;
+            document.getElementById("record-btn").innerText = "🎤 Recording...";
+            document.getElementById("record-btn").style.background = "#2980b9";
+
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = true;  // Enable real-time results
+            recognition.continuous = true;      // Keep listening
+            recognition.maxAlternatives = 3;    // Get multiple possibilities for better accuracy
+
+            recognition.onresult = (event) => {
+                finalTranscript = ""; // Reset for new speech
+                for (let i = 0; i < event.results.length; i++) {
+                    finalTranscript += event.results[i][0].transcript + " ";
+                }
+                document.getElementById("user_text").value = finalTranscript.trim();
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech Recognition Error:", event.error);
+            };
+
+            recognition.start();
+            startTimer();
+        }
+    }
+
+    function stopRecording() {
+        if (isRecording && recognition) {
+            recognition.stop();
+            isRecording = false;
+            document.getElementById("record-btn").innerText = "🎙 Start Recording";
+            document.getElementById("record-btn").style.background = "#3498db";
+        }
+    }
+
+    // Handle form submission
+    document.getElementById('submission-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearInterval(timer);
+        stopRecording(); // Stop recording when submit button is clicked
+
+        const spokenText = document.getElementById('user_text').value.trim();
+        if (!spokenText) {
+            alert('No speech detected. Please try again.');
+            return;
+        }
+
+        this.submit();
+    });
+</script>
+
+
+</body>
+</html>

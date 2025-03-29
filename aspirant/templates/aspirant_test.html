@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspirant Practice </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1976D2;
+            --primary-light: #BBDEFB;
+            --primary-dark: #0D47A1;
+            --accent: #03A9F4;
+            --text-dark: #263238;
+            --text-light: #FFFFFF;
+            --background: #FFFFFF;
+            --danger: #F44336;
+            --card-shadow: 0 4px 12px rgba(25, 118, 210, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #F8FBFF;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #1976D2, #03A9F4);
+            color: white;
+            padding: 6rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 1.5rem 1.5rem;
+            box-shadow: 0 4px 20px rgba(25, 118, 210, 0.2);
+        }
+
+        .page-content {
+            flex: 1;
+            z-index: 10;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(25, 118, 210, 0.2);
+        }
+
+        .card-header {
+            border-bottom: none;
+            background: white;
+            padding: 1.5rem 1.5rem 0.5rem;
+        }
+
+        .test-module {
+            transition: all 0.3s;
+        }
+
+        .custom-select {
+            border: 1px solid #E3F2FD;
+            border-radius: 10px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-dark);
+        }
+
+        .custom-select:hover, .custom-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
+        }
+
+        .btn-custom-primary {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-custom-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(13, 71, 161, 0.3);
+        }
+
+        .btn-custom-success {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-custom-success:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(13, 71, 161, 0.3);
+        }
+
+        .btn-custom-danger {
+            background-color: var(--danger);
+            color: white;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-custom-danger:hover {
+            background-color: #D32F2F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+        }
+
+
+        .icon-box {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .navbar {
+            background-color: white !important;
+            box-shadow: 0 2px 10px rgba(25, 118, 210, 0.1);
+        }
+
+        .navbar-brand {
+            color: var(--primary) !important;
+            font-weight: bold;
+        }
+
+        .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: var(--primary) !important;
+        }
+
+        .nav-link.active {
+            color: var(--primary) !important;
+        }
+
+        .alerts-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .custom-alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .footer {
+            margin-top: auto;
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 3rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <span class="ms-2">Practice Section</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button class="btn btn-primary" onclick="history.back()" style="height:45px;">
+                            <i class="fas fa-home me-1"></i>Back
+                        </button>
+
+                    </li>
+
+                    <li class="nav-item">
+                        <button class="btn btn-custom-danger ms-2" onclick="window.location.href='{% url 'aspirant_logout' %}';"><i class="fas fa-sign-out-alt me-1"></i> Logout</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+<!--    <section class="hero-section text-center">-->
+<!--        <div class="container">-->
+<!--            <h1 class="fw-bold mb-4">Welcome to Aspirant Test</h1>-->
+<!--            <p class="lead mb-4">Master your language skills with our comprehensive assessment platform</p>-->
+<!--        </div>-->
+<!--    </section>-->
+
+    <!-- Messages Section -->
+    {% if messages %}
+    <div class="alerts-container">
+        {% for m in messages %}
+        <div class="custom-alert bg-danger text-white">
+            <i class="fas fa-exclamation-circle me-2"></i> {{m}}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div class="container page-content">
+        <div class="row mb-5">
+            <div class="col-12 text-center mb-4">
+                <h2 class="fw-bold text-primary">Choose Your Module</h2>
+                <p class="text-muted">Select a category and subcategory to begin your assessment</p>
+            </div>
+
+            <!-- Speaking Module -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 test-module">
+                    <div class="card-header text-center">
+                        <div class="icon-box">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <h5 class="fw-bold">Speaking</h5>
+                    </div>
+                    <div class="card-body">
+                        <select class="form-select custom-select" onchange="window.location.href=this.value;">
+                            <option selected disabled>Select Test Type</option>
+                            <option value="{% url 's_read_aloud_test' %}">Read Aloud</option>
+                            <option value="{% url 's_short_answer_test' %}">Short Answer</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Writing Module -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 test-module">
+                    <div class="card-header text-center">
+                        <div class="icon-box">
+                            <i class="fas fa-pen-fancy"></i>
+                        </div>
+                        <h5 class="fw-bold">Writing</h5>
+                    </div>
+                    <div class="card-body">
+                        <select class="form-select custom-select" onchange="window.location.href=this.value;">
+                            <option selected disabled>Select Test Type</option>
+                            <option value="{% url 'w_summarize_passage_test' %}">Summarize Passage</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reading Module -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 test-module">
+                    <div class="card-header text-center">
+                        <div class="icon-box">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h5 class="fw-bold">Reading</h5>
+                    </div>
+                    <div class="card-body">
+                        <select class="form-select custom-select" onchange="window.location.href=this.value;">
+                            <option selected disabled>Select Test Type</option>
+                            <option value="{% url 'r_mcq_single_test' %}">MCQ Single</option>
+                            <option value="{% url 'r_mcq_multiple_test' %}">MCQ Multiple</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Listening Module -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card h-100 test-module">
+                    <div class="card-header text-center">
+                        <div class="icon-box">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <h5 class="fw-bold">Listening</h5>
+                    </div>
+                    <div class="card-body">
+                        <select class="form-select custom-select" onchange="window.location.href=this.value;">
+                            <option selected disabled>Select Test Type</option>
+                            <option value="{% url 'l_mcq_single_test' %}">MCQ Single</option>
+                            <option value="{% url 'l_fill_blanks_test' %}">Fill in the blanks</option>
+                            <option value="{% url 'l_correct_summary_test' %}">Choose Correct Summary</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+<!--        <div class="row justify-content-center mb-5">-->
+<!--            <div class="col-md-6">-->
+<!--                <div class="card text-center">-->
+<!--                    <div class="card-body py-4">-->
+<!--                        <h4 class="fw-bold mb-3 text-primary">View Your Test Results</h4>-->
+<!--                        <p class="text-muted mb-4">Check your performance and track your progress</p>-->
+<!--                        <button class="btn btn-custom-success" onclick="window.location.href='{% url 'aspirant_result' %}'">-->
+<!--                            <i class="fas fa-chart-line me-2"></i> View Results-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <p class="mb-0">© 2025 BrainBoost. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-hide alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.custom-alert');
+                alerts.forEach(alert => {
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateX(100%)';
+                    setTimeout(() => alert.remove(), 300);
+                });
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

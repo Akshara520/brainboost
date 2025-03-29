@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Read MCQ Single</title>
+    <link rel="stylesheet" href="/static/css/rmss.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Show Read MCQ Single</h1>
+
+        <div class="buttons">
+            <button onclick="window.location.href='{% url 'admin_dashboard' %}'" style="background-color:#519de4">Admin Dashboard</button>
+            <button onclick="window.location.href='{% url 'r_mcq_single_add' %}'" style="background-color:green">Add Read MCQ Single</button>
+            <button onclick="window.location.href='{% url 'admin_logout' %}'" style="background-color:red">Logout</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Passage</th>
+                    <th>Question</th>
+                    <th>Choice 1</th>
+                    <th>Choice 2</th>
+                    <th>Choice 3</th>
+                    <th>Choice 4</th>
+                    <th>Choice 5</th>
+                    <th>Answer</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mcq in mcq %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ mcq.passage }}</td>
+                    <td>{{ mcq.question }}</td>
+                    <td>{{ mcq.choice1 }}</td>
+                    <td>{{ mcq.choice2 }}</td>
+                    <td>{{ mcq.choice3 }}</td>
+                    <td>{{ mcq.choice4 }}</td>
+                    <td>{{ mcq.choice5 }}</td>
+                    <td>{{ mcq.answer }}</td>
+                    <td class="action-btns">
+                        <a href="{% url 'r_mcq_single_edit' mcq.id %}">Edit</a> <br>
+                        <a href="{% url 'r_mcq_single_delete' mcq.id %}" onclick="return confirm('Are you sure you want to delete this question?');">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8">No MCQs available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

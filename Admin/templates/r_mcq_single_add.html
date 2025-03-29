@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add MCQ Single Question</title>
+    <link rel="stylesheet" href="{% static 'css/rmsa.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Add MCQ Single Question</h1>
+
+        <div class="button-group">
+            <button onclick="window.location.href='{% url 'admin_dashboard' %}';" style="background-color:#519de4">Admin Dashboard</button>
+            <button onclick="window.location.href='{% url 'r_mcq_single_show' %}';" style="background-color:green">Show Read MCQ Single</button>
+            <button onclick="window.location.href='{% url 'admin_logout' %}';" style="background-color:red">Logout</button>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <label for="passage">Passage</label>
+            <textarea class="text-area" id="passage" name="passage" placeholder="Add the passage" required></textarea><br>
+
+            <label for="question">Question:</label>
+            <input type="text" id="question" name="question" required>
+
+            <label for="choice1">Choice 1:</label>
+            <input type="text" id="choice1" name="choice1" required>
+
+            <label for="choice2">Choice 2:</label>
+            <input type="text" id="choice2" name="choice2" required>
+
+            <label for="choice3">Choice 3:</label>
+            <input type="text" id="choice3" name="choice3" required>
+
+            <label for="choice4">Choice 4:</label>
+            <input type="text" id="choice4" name="choice4" required>
+
+            <label for="choice4">Choice 5:</label>
+            <input type="text" id="choice5" name="choice5" required>
+
+            <label for="answer">Answer:</label>
+            <select id="answer" name="answer" required>
+                <option value="choice1">Choice 1</option>
+                <option value="choice2">Choice 2</option>
+                <option value="choice3">Choice 3</option>
+                <option value="choice4">Choice 4</option>
+                <option value="choice5">Choice 5</option>
+            </select>
+
+            <button type="submit" style="background-color:#2f3786" >Save Question</button>
+        </form>
+    </div>
+</body>
+</html>

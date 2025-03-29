@@ -1,0 +1,64 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Show Fill Blank Questions</title>
+    <link rel="stylesheet" href="{% static 'css/lfbs.css' %}">
+</head>
+<body>
+
+<h1>Show Fill Blank Questions</h1>
+
+<div class="navbar">
+    <button onclick="window.location.href='{% url 'admin_dashboard' %}';" style="background-color:#519de4">Admin Dashboard</button>
+    <button onclick="window.location.href='{% url 'l_fill_blanks_add' %}';" style="background-color:green">Add Fill Blank Questions</button>
+    <button onclick="window.location.href='{% url 'admin_logout' %}';" style="background-color:red">Logout</button>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Audio</th>
+            <th>Passage</th>
+            <th>Blank 1</th>
+            <th>Blank 2</th>
+            <th>Blank 3</th>
+            <th>Blank 4</th>
+            <th>Blank 5</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for question in questions %}
+        <tr>
+            <td>{{ question.id }}</td>
+            <td>
+                <audio controls>
+                    <source src="{{ question.audio.url }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </td>
+            <td>{{ question.passage }}</td>
+            <td>{{ question.answers.blank1 }}</td>
+            <td>{{ question.answers.blank2 }}</td>
+            <td>{{ question.answers.blank3 }}</td>
+            <td>{{ question.answers.blank4 }}</td>
+            <td>{{ question.answers.blank5 }}</td>
+            <td>
+                <button onclick="window.location.href='{% url 'l_fill_blanks_edit' question.id %}';">Edit</button>
+                <button onclick="if(confirm('Are you sure you want to delete this question?')) { window.location.href='{% url 'l_fill_blanks_delete' question.id %}'; }">Delete</button>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="9">No questions available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

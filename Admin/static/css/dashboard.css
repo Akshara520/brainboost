@@ -1,0 +1,285 @@
+/* General Styles */
+:root {
+    --background: #F0F4F8; /* Light blue background */
+    --color: #003366; /* Deep blue for text */
+    --primary-color: #007BFF; /* Bright blue for primary elements */
+    --glass-color: rgba(255, 255, 255, 0.8); /* White glass effect */
+    --hover-color: #0056b3; /* Darker blue hover effect */
+    --sidebar-color: #003366; /* Dark blue for sidebar */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--background);
+    color: var(--color);
+    min-height: 100vh;
+    display: flex;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+/* Side Navigation */
+.side-nav {
+    width: 300px; /* Reduced width */
+    height: 100vh;
+    background: var(--sidebar-color);
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Logout Button */
+.logout-container {
+    margin-bottom: 30px;
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    background: var(--glass-color);
+    color: var(--sidebar-color);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.logout-btn:hover {
+    background: var(--hover-color);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+.logout-btn i {
+    font-size: 1.2rem;
+}
+
+/* Navigation Buttons */
+.nav-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.nav-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    background: var(--glass-color);
+    color: var(--sidebar-color);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.nav-btn:hover {
+    background: var(--hover-color);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+.nav-btn i {
+    font-size: 1.2rem;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 200px; /* Adjusted to match reduced sidebar width */
+    height: 100vh; /* Full height */
+    overflow-y: auto; /* Enable scrolling only for main content */
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    background: var(--glass-color);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    animation: slideUp 1s ease-in-out;
+}
+
+/* Header */
+.row.text-center.mb-4 h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--color);
+    margin-bottom: 20px;
+    animation: slideDown 1s ease-in-out;
+}
+
+/* Main Sections */
+.main-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    width: 100%; /* Ensure full width */
+}
+
+.section-card {
+    background: var(--glass-color);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.section-card h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--hover-color);
+    padding-bottom: 10px;
+}
+
+.section-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.section-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    background: var(--glass-color);
+    color: var(--color);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.section-btn:hover {
+    background: var(--hover-color);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .side-nav {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    .logout-container {
+        margin-bottom: 0;
+    }
+
+    .nav-buttons {
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .nav-btn, .logout-btn {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    .main-content {
+        padding: 10px;
+        margin-left: 0; /* Remove margin for mobile */
+    }
+
+    .row.text-center.mb-4 h1 {
+        font-size: 2rem;
+    }
+
+    .section-card {
+        flex: 1 1 100%; /* Full width for mobile */
+    }
+}
+
+/* Auth Buttons */
+ /* Center everything on the page */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            flex-direction: column; /* Stack items vertically */
+            text-align: center;
+            /*background-color: #f4f4f4;  Optional: Add a background color */
+        }
+
+        /* Style the welcome message */
+        .welcome-message {
+            font-size: 48px; /* Large font size */
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px; /* Space between message and buttons */
+        }
+
+        /* Style the buttons */
+        .auth-buttons .btn {
+            margin: 10px; /* Space between buttons */
+            padding: 15px 30px; /* Larger padding for bigger buttons */
+            font-size: 18px; /* Larger font size */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Registration button */
+        .btn-register {
+            background-color: #007bff; /* Green */
+            color: white;
+        }
+        .btn-register:hover {
+            background-color: #0056b3; /* Darker green on hover */
+        }
+
+        /* Login button */
+        .btn-login {
+            background-color: #007bff; /* Blue */
+            color: white;
+        }
+        .btn-login:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Home button */
+        .btn-home {
+            background-color: #6c757d; /* Gray */
+            color: white;
+        }
+        .btn-home:hover {
+            background-color: #5a6268; /* Darker gray on hover */
+        }
+

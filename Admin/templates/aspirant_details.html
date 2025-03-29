@@ -1,0 +1,73 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspirant Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/sd.css' %}">
+</head>
+<body>
+
+    <!-- Side Navigation Bar -->
+    <div class="sidenav">
+        <button class="btn logout-btn" onclick="window.location.href='{% url 'admin_dashboard' %}';">
+                <i class="fa fa-user" aria-hidden="true"></i> Admin Dashboard
+        </button>
+        <br>
+        <div class="logout-container">
+            <button class="btn logout-btn" onclick="window.location.href='{% url 'admin_logout' %}';">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- Heading -->
+        <div class="container">
+            <h2 class=".page-title">Aspirant Details</h2>
+        </div>
+
+        <!-- Student Table -->
+        <div class="container">
+            <table class="student-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Aspirant Name</th>
+                        <th>Reg ID</th>
+                        <th>Aspirant Email</th>
+                        <th>Aspirant Parent's Email</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for aspirant in aspirants %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ aspirant.user.first_name }}</td>
+                        <td>{{ aspirant.reg_id }}</td>
+                        <td>{{ aspirant.user.username }}</td>
+                        <td>{{ aspirant.user.email }}</td>
+                        <td>
+                            <button class="btn btn-primary btn-lg active" onclick="window.location.href='{% url 'aspirant_result_full' %}';">
+                            Click
+                            </button>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

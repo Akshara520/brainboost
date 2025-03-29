@@ -1,0 +1,91 @@
+body {
+    font-family: Arial, sans-serif;
+    background: white;
+    color: #fff;
+    padding: 20px;
+    text-align: left;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    background-color: #2f3786;
+    padding: 10px;
+    color: white;
+    text-align: center;
+    font-size: 24px;
+}
+
+.nav-buttons button {
+    border: none;
+    padding: 10px 96px;
+    margin: 7px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    transition: background 0.3s;
+}
+
+.nav-buttons button:hover {
+    background: linear-gradient(to right, #feb47b, #ff7e5f);
+}
+
+input[type="text"], select {
+    width: 89%;
+    padding: 3px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: none;
+    background: #ccdfe2;
+}
+
+input[type="submit"] {
+    background-color:#519de4;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button[type=\"submit\"] {
+    background-color:#519de4;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    transition: background 0.3s;
+}
+
+button[type=\"submit\"]:hover {
+    background-color:#519de4;
+}
+
+.btn-group button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+}
+
+.btn-group {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.text-area {
+    width: 835px;
+    margin-left: 1px;
+    height:100px;
+    border-radius: 6px
+}

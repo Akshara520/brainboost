@@ -1,0 +1,43 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Short Answer</title>
+    <link href="{% static 'css/ssaa.css' %}" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Edit Short Answer</h1>
+    </header>
+    <nav>
+        <a href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+        <a href="{% url 's_short_answer_show' %}">Show Short Answer</a>
+        <a href="{% url 'admin_logout' %}">Logout</a>
+    </nav>
+    <div class="container">
+        <h1>Edit Short Answer</h1>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="audio">Upload Audio</label>
+                <input type="file" id="audio" name="audio" accept="audio/*">
+                {% if short_answer.audio %}
+                    <p>Current Audio:</p> <audio controls>
+                <source src="{{ short_answer.audio.url }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+                {% endif %}
+
+            </div>
+            <div class="form-group">
+                <label for="answer">Answer</label>
+                <textarea id="answer" name="answer" placeholder="Enter the answer here..." required>{{ short_answer.answer }}</textarea>
+            </div>
+            <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>

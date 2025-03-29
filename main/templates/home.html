@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Boost - PTE Evaluation</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.jpg' %}">
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="title">BRAIN BOOST</h1>
+        <h2 class="subtitle">PTE PRACTICE</h2>
+
+        <div class="button-container">
+            <a href="{% url 'admin_dashboard' %}" class="role-btn">Admin</a>
+            <a href="{% url 'aspirant_dashboard1' %}" class="role-btn">Aspirant</a>
+        </div>
+
+
+    </div>
+
+      <!-- Add this section to your existing HTML -->
+<div class="card-carousel">
+    <div class="cards-wrapper">
+        <div class="card active">
+            <h2>What is PTE?</h2>
+            <p>The Pearson Test of English (PTE) is a computer-based English language test for non-native speakers. It assesses listening, reading, speaking, and writing skills.</p>
+        </div>
+        <div class="card">
+            <h2>Why Brain Boost?</h2>
+               <p> Boost your confidence, with everything you need easily accessed through <span>Brain Boost</span></p>
+
+        </div>
+        <div class="card">
+            <h2>How it works?</h2>
+            <p>The practice section consists of four parts: Speaking, Writing, Reading, and Listening. An aspirant can attend mock test with timer and can view the result</p>
+        </div>
+    </div>
+    <!-- Navigation Dots -->
+    <div class="nav-dots">
+        <span class="dot active" data-index="0"></span>
+        <span class="dot" data-index="1"></span>
+        <span class="dot" data-index="2"></span>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script>
+const cardsWrapper = document.querySelector('.cards-wrapper');
+const cards = document.querySelectorAll('.card');
+const dots = document.querySelectorAll('.dot');
+let currentIndex = 0;
+
+function showCard(index) {
+    const offset = -index * 100;
+    cardsWrapper.style.transform = `translateX(${offset}%)`;
+
+    cards.forEach((card, i) => {
+        if (i === index) {
+            card.classList.add('active');
+        } else {
+            card.classList.remove('active');
+        }
+    });
+
+    dots.forEach((dot, i) => {
+        if (i === index) {
+            dot.classList.add('active');
+        } else {
+            dot.classList.remove('active');
+        }
+    });
+}
+
+dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+        currentIndex = index;
+        showCard(currentIndex);
+    });
+});
+
+// Auto-swap cards every 5 seconds
+setInterval(() => {
+    currentIndex = (currentIndex + 1) % cards.length;
+    showCard(currentIndex);
+}, 5000);
+</script>>
+
+
