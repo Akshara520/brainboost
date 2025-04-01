@@ -4,152 +4,199 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aspirant Results</title>
-
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --background: #F0F4F8; /* Light blue background */
-            --color: #003366; /* Deep blue for text */
-            --primary-color: #007BFF; /* Bright blue for primary elements */
-            --glass-color: rgba(255, 255, 255, 0.8); /* White glass effect */
-            --hover-color: #0056b3; /* Darker blue hover effect */
-        }
-
         body {
-            font-family: 'Arial', sans-serif;
-            background: var(--background);
-            color: var(--color);
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
+            background-color: #f8f9fa;
             padding: 20px;
-            background: var(--glass-color);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 1s ease-in-out;
         }
-
-        h2, h3 {
+        .card-header {
             font-weight: bold;
-            color: var(--primary-color);
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-
-        th {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .back-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
+        .info-box {
+            margin-bottom: 20px;
             border-radius: 5px;
-            font-size: 16px;
-            transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
-        .back-button:hover {
-            background: var(--hover-color);
+        .info-box-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .info-box-content {
+            padding: 10px;
         }
-
-        .analysis {
-            background: var(--primary-color);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
+        .info-box-text {
+            display: block;
+            font-size: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .info-box-number {
+            display: block;
             font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .total-score {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+        .student-info {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h2>Aspirant Result</h2>
-        <button class="back-button" onclick="history.back()">Back</button>
-        <!-- Current Score Table -->
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Section</th>
-                    <th>Marks</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Speaking</td><td>{{ aspirant_mark.speaking }}</td></tr>
-                <tr><td>Writing</td><td>{{ aspirant_mark.writing }}</td></tr>
-                <tr><td>Reading</td><td>{{ aspirant_mark.reading }}</td></tr>
-                <tr><td>Listening</td><td>{{ aspirant_mark.listening }}</td></tr>
-            </tbody>
-        </table>
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Aspirant Test Results</h1>
+            <a href="{% url 'aspirant_details'  %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
 
-        <h3>Previous Scores</h3>
+        <!-- Student Information -->
+        <div class="student-info">
+            <div class="row">
+                <div class="col-md-4">
+                    <p><strong>Name:</strong> {{ aspirant.user.get_full_name }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Registration ID:</strong> {{ aspirant.reg_id }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Email:</strong> {{ aspirant.user.email }}</p>
+                </div>
+            </div>
+        </div>
 
-        <!-- Previous Scores Table -->
-        {% if previous_results %}
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Speaking</th>
-                    <th>Writing</th>
-                    <th>Reading</th>
-                    <th>Listening</th>
-                </tr>
-            </thead>
-            <tbody id="previous-scores-table">
-                {% for result in previous_results %}
-                <tr>
-                    <td>{{ result.attempted_on|date:"Y-m-d" }}</td>
-                    <td>{{ result.speaking }}</td>
-                    <td>{{ result.writing }}</td>
-                    <td>{{ result.reading }}</td>
-                    <td>{{ result.listening }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <!-- Test Scores -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="info-box bg-info text-white">
+                    <span class="info-box-icon"><i class="fas fa-pen"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Writing</span>
+                        <span class="info-box-number">{{ writing }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box bg-success text-white">
+                    <span class="info-box-icon"><i class="fas fa-book"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Reading</span>
+                        <span class="info-box-number">{{ reading }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box bg-warning text-white">
+                    <span class="info-box-icon"><i class="fas fa-comment"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Speaking</span>
+                        <span class="info-box-number">{{ speaking }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box bg-danger text-white">
+                    <span class="info-box-icon"><i class="fas fa-headphones"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Listening</span>
+                        <span class="info-box-number">{{ listening }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        {% else %}
-           <p class="text-center text-muted">No previous results available.</p>
-        {% endif %}
+        <!-- Total Score -->
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">Total Score</h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="total-score">{{ total }}</div>
+            </div>
+        </div>
 
+        <!-- Detailed Breakdown (Optional) -->
+        <div class="card mt-4">
+            <div class="card-header bg-secondary text-white">
+                <h3 class="card-title mb-0">Detailed Breakdown</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Writing</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Summarize Written Text
+                                <span class="badge bg-primary rounded-pill">{{ writing }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Reading</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Multiple Choice (Single Answer)
+                                <span class="badge bg-primary rounded-pill">{{ reading_single_marks }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Multiple Choice (Multiple Answers)
+                                <span class="badge bg-primary rounded-pill">{{ reading_multiple_marks }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <h5>Speaking</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Read Aloud
+                                <span class="badge bg-primary rounded-pill">{{ speaking_loud_marks }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Short Answer
+                                <span class="badge bg-primary rounded-pill">{{ speaking_short_marks }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Listening</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Fill in the Blanks
+                                <span class="badge bg-primary rounded-pill">{{ listening_fill_marks }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Multiple Choice (Single Answer)
+                                <span class="badge bg-primary rounded-pill">{{ listening_mcq_marks }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Highlight Correct Summary
+                                <span class="badge bg-primary rounded-pill">{{ listening_summary_marks }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-<!--    </div> -->
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-    

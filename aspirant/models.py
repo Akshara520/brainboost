@@ -75,7 +75,7 @@ class ResultHistory(models.Model):
     reading = models.IntegerField()
     speaking = models.IntegerField()
     listening = models.IntegerField()
-    total = models.IntegerField()
+    #total = models.IntegerField()
     attempted_on = models.DateTimeField(auto_now_add=True) # Store attempt time
 
 

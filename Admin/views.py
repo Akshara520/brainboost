@@ -567,56 +567,67 @@ def aspirant_details(request):
 
 from django.utils.timezone import now
 
-def aspirant_result_full(request):
-    user = request.user  # Fetch the logged-in user
+def aspirant_details(request):
+    aspirants = AspirantReg.objects.all()
+    return render(request, "aspirant_details.html", {"aspirants": aspirants})
 
-    # Calculate latest marks
+def aspirant_results(request, aspirant_id):
+    aspirant = get_object_or_404(AspirantReg, id=aspirant_id)
+    user = aspirant.user
+
+    # Calculate Writing marks
+    writing_marks = sum(write.mark for write in SummarizePassageSubmit.objects.filter(student=user))
+
+    # Calculate Reading marks
+    reading_single = ReadingTestResult.objects.filter(student=user.first_name).first()
+    reading_single_marks = reading_single.mark if reading_single else 0
+    reading_multiple_marks = sum(read.mark for read in MCQMultipleSubmit.objects.filter(student=user))
+    reading_marks = reading_single_marks + reading_multiple_marks
+
+    # Calculate Speaking marks
+    speaking_loud_marks = sum(read.mark for read in Read_aloud_submit.objects.filter(student=user))
+    speaking_short_marks = sum(read.mark for read in Short_answer_submit.objects.filter(student=user))
+    speaking_marks = speaking_loud_marks + speaking_short_marks
+
+    # Calculate Listening marks
     listening_fill_marks = sum(listening.mark for listening in ListeningFillBlanksSubmit.objects.filter(student=user))
     listening_mcq_marks = sum(listening.mark for listening in ListeningMCQSingleSubmit.objects.filter(student=user))
     listening_summary_marks = sum(listening.mark for listening in ListeningCorrectSummarySubmit.objects.filter(student=user))
-    total_listening_marks = listening_fill_marks + listening_mcq_marks + listening_summary_marks
+    listening_marks = listening_fill_marks + listening_mcq_marks + listening_summary_marks
 
-    speaking_loud = sum(read.mark for read in Read_aloud_submit.objects.filter(student=user))
-    speaking_short = sum(read.mark for read in Short_answer_submit.objects.filter(student=user))
-    total_speaking = speaking_short + speaking_loud
+    # Calculate Total
+    total_marks = writing_marks + reading_marks + speaking_marks + listening_marks
 
-    total_writing = sum(write.mark for write in SummarizePassageSubmit.objects.filter(student=user))
-
-    reading_single_result = ReadingTestResult.objects.filter(student=user.first_name).first()
-    reading_single = reading_single_result.mark if reading_single_result else 0  # Default to 0 if no record exists
-
-    reading_multiple = sum(read.mark for read in MCQMultipleSubmit.objects.filter(student=user))
-    total_reading = reading_single + reading_multiple
-
-    grand_total = total_writing + total_reading + total_speaking + total_listening_marks
-
-    # Retrieve or create Final_Result
-    final, created = Final_Result.objects.update_or_create(
+    # Get or create final result
+    final_result, created = Final_Result.objects.get_or_create(
         student=user,
         defaults={
-            "writing": total_writing,
-            "reading": total_reading,
-            "speaking": total_speaking,
-            "listening": total_listening_marks,
+            "writing": writing_marks,
+            "reading": reading_marks,
+            "speaking": speaking_marks,
+            "listening": listening_marks,
         }
     )
 
-    # Retrieve previous results for history
-    previous_results = ResultHistory.objects.filter(student=user).order_by('-attempted_on')[:1]
+    context = {
+        "aspirant": aspirant,
+        "writing": writing_marks,
+        "reading": reading_marks,
+        "speaking": speaking_marks,
+        "listening": listening_marks,
+        "total": total_marks,
+        "final_result": final_result
+    }
 
-    return render(request, "aspirant_results.html", {
-        "aspirant_mark": final,
-        "previous_results": previous_results
-    })
+    return render(request, "aspirant_results.html",context)
+
+    # return render(request, "aspirant_results.html", {
+    #     "aspirant_mark": final,
+    #     "previous_results": previous_results
+    # })
 
     # return render(request, "aspirant_results.html",{'results':results})
 
 
-def aspirant_results_admin(request):
-    # Fetch all final results for all aspirants
-    all_results = Final_Result.objects.all().select_related('student')
 
-    return render(request, "aspirant_results_admin.html", {
-        "aspirants_results": all_results
-    })
 

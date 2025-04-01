@@ -22,6 +22,13 @@ from difflib import SequenceMatcher
 from django.shortcuts import render, get_object_or_404
 from .models import Final_Result, AspirantReg, ReadingTestResult
 from django.contrib.auth.decorators import login_required
+import spacy
+
+
+# Load the NLP model
+nlp = spacy.load("en_core_web_sm")
+
+
 # Create your views here.
 
 
@@ -95,8 +102,6 @@ def aspirant_registration(request):
     return render(request, "aspirant_registration.html")
 
 
-
-
 def face_image(request):
     reg_id = request.session.get('reg_id')
     print(reg_id, "hi")
@@ -105,91 +110,88 @@ def face_image(request):
         # Show message to wait for the camera to come
         #     messages.info(request, "Please wait, camera will come now...")
 
-            if not os.path.exists(r"C:/Users/user/PycharmProjects/brainboost/Capture"):
-                os.makedirs("C:/Users/user/PycharmProjects/brainboost/Capture")
+        if not os.path.exists(r"C:/Users/user/PycharmProjects/brainboost/Capture"):
+            os.makedirs("C:/Users/user/PycharmProjects/brainboost/Capture")
 
-            faceCascade = cv2.CascadeClassifier(
-                "C:/Users/user/PycharmProjects/brainboost/haarcascade_frontalface_default.xml")
-            cam = cv2.VideoCapture(0)
-            cam.set(3, 640)
-            cam.set(4, 480)
-            count = 0
+        faceCascade = cv2.CascadeClassifier(
+            "C:/Users/user/PycharmProjects/brainboost/haarcascade_frontalface_default.xml")
+        cam = cv2.VideoCapture(0)
+        cam.set(3, 640)
+        cam.set(4, 480)
+        count = 0
 
-            print("\n [INFO] Initializing face capture. Look the camera and wait ...")
+        print("\n [INFO] Initializing face capture. Look the camera and wait ...")
 
-            # # Initial message
-            # messages.info(request, "Camera is now on. Please look at the camera...")
+        # # Initial message
+        # messages.info(request, "Camera is now on. Please look at the camera...")
 
-            while True:
-                ret, img = cam.read()
-                # print(img)
-                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                faces = faceCascade.detectMultiScale(gray, 1.3, 5)
+        while True:
+            ret, img = cam.read()
+            # print(img)
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            faces = faceCascade.detectMultiScale(gray, 1.3, 5)
+            for (x, y, w, h) in faces:
+                cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+                count += 1
+                # Save the captured image into the images directory
+
+                cv2.imwrite(
+                    "C:/Users/user/PycharmProjects/brainboost/Capture/" + str(
+                        reg_id) + '.' + str(count) + ".jpg", gray[y:y + h, x:x + w])
+                cv2.imshow('image', img)
+            # Press Escape to end the program.
+            k = cv2.waitKey(100) & 0xff
+            if k < 60:
+                break
+            # Take 60 face samples and stop video. You may increase or decrease the number of images.
+            # The more is better while training the model.
+            elif count >= 60:
+                break
+
+        print("\n [INFO] Exiting Program.")
+        cam.release()
+        cv2.destroyAllWindows()
+
+        # # Notify that the camera has stopped and training is going on
+        # messages.warning(request, "Training faces... Please Wait...!!!")
+
+        path = "C:/Users/user/PycharmProjects/brainboost/Capture"
+        recognizer = cv2.face.LBPHFaceRecognizer_create()
+
+        # Haar cascade file
+
+        def getImagesAndLabels(path):
+            imagePaths = [os.path.join(path, f) for f in os.listdir(path)]
+            faceSamples = []
+            ids = []
+            for imagePath in imagePaths:
+                #         print(imagePath)
+                # convert it to grayscale
+                PIL_img = Image.open(imagePath).convert('L')
+                img_numpy = np.array(PIL_img, 'uint8')
+                id = int(os.path.split(imagePath)[-1].split(".")[0])
+                faces = faceCascade.detectMultiScale(img_numpy)
                 for (x, y, w, h) in faces:
-                    cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                    count += 1
-                    # Save the captured image into the images directory
+                    faceSamples.append(img_numpy[y:y + h, x:x + w])
+                    ids.append(id)
 
-                    cv2.imwrite(
-                        "C:/Users/user/PycharmProjects/brainboost/Capture/" + str(
-                            reg_id) + '.' + str(count) + ".jpg", gray[y:y + h, x:x + w])
-                    cv2.imshow('image', img)
-                # Press Escape to end the program.
-                k = cv2.waitKey(100) & 0xff
-                if k < 60:
-                    break
-                # Take 60 face samples and stop video. You may increase or decrease the number of images.
-                # The more is better while training the model.
-                elif count >= 60:
-                    break
+            return faceSamples, ids
 
-            print("\n [INFO] Exiting Program.")
-            cam.release()
-            cv2.destroyAllWindows()
+        print("\n[INFO] Training faces...")
 
-            # # Notify that the camera has stopped and training is going on
-            # messages.warning(request, "Training faces... Please Wait...!!!")
+        faces, ids = getImagesAndLabels(path)
+        print(ids)
+        recognizer.train(faces, np.array(ids))
+        # Save the model into the current directory.
+        recognizer.write('C:/Users/user/PycharmProjects/brainboost/trainer.yml')
 
-            path = "C:/Users/user/PycharmProjects/brainboost/Capture"
-            recognizer = cv2.face.LBPHFaceRecognizer_create()
+        # Final message
+        # messages.info(request, "Training complete, redirecting to login.")
+        # return JsonResponse({'status': 'success', 'message': 'Training complete!'})
 
-            # Haar cascade file
-
-            def getImagesAndLabels(path):
-                imagePaths = [os.path.join(path, f) for f in os.listdir(path)]
-                faceSamples = []
-                ids = []
-                for imagePath in imagePaths:
-                    #         print(imagePath)
-                    # convert it to grayscale
-                    PIL_img = Image.open(imagePath).convert('L')
-                    img_numpy = np.array(PIL_img, 'uint8')
-                    id = int(os.path.split(imagePath)[-1].split(".")[0])
-                    faces = faceCascade.detectMultiScale(img_numpy)
-                    for (x, y, w, h) in faces:
-                        faceSamples.append(img_numpy[y:y + h, x:x + w])
-                        ids.append(id)
-
-                return faceSamples, ids
-
-            print("\n[INFO] Training faces...")
-
-            faces, ids = getImagesAndLabels(path)
-            print(ids)
-            recognizer.train(faces, np.array(ids))
-            # Save the model into the current directory.
-            recognizer.write('C:/Users/user/PycharmProjects/brainboost/trainer.yml')
-
-            # Final message
-            # messages.info(request, "Training complete, redirecting to login.")
-            # return JsonResponse({'status': 'success', 'message': 'Training complete!'})
-
-            return redirect(aspirant_login)
+        return redirect(aspirant_login)
 
     return render(request, "face_image.html", {'reg_id': reg_id})
-
-
-
 
 
 def aspirant_login(request):
@@ -210,8 +212,6 @@ def aspirant_login(request):
         else:
             messages.warning(request, "Invalid email or password")
     return render(request, "aspirant_login.html")
-
-
 
 
 def face_identity(request):
@@ -332,6 +332,7 @@ def aspirant_password_reset(request):
             messages.warning(request, "Password Mismatch")
     return render(request, "aspirant_password_reset.html", {'send_time': send_time_str})
 
+
 @login_required
 def aspirant_dashboard(request, aspirant_id):
     aspirant = AspirantReg.objects.filter(id=aspirant_id).first()
@@ -339,7 +340,9 @@ def aspirant_dashboard(request, aspirant_id):
     if not aspirant:
         messages.error(request, "Aspirant not found.")
         return redirect(aspirant_login)
-    return render(request, 'aspirant_dashboard.html', {'is_authenticated': True, "aspirant_name": aspirant.user.first_name, "reg_id": aspirant.reg_id})
+    return render(request, 'aspirant_dashboard.html',
+                  {'is_authenticated': True, "aspirant_name": aspirant.user.first_name,
+                   "reg_id": aspirant.reg_id, "aspirant_id": aspirant_id })
 
 
 def aspirant_dashboard1(request):
@@ -350,7 +353,9 @@ def aspirant_logout(request):
     logout(request)
     return redirect(aspirant_dashboard1)
 
+
 '''-------------------listen_correct_start----------------'''
+
 
 def l_correct_summary_test(request):
     if 'mcq_listen' not in request.session:
@@ -423,8 +428,6 @@ def mcq_l_submit(request):
             messages.error(request, "Invalid question submission.")
             return redirect('aspirant_test')
 
-
-
         print(user_answer)
         print(question.answer)
 
@@ -476,7 +479,8 @@ def l_fill_blanks_test(request):
 
     # Start fresh if no questions selected yet
     if not fill_blanks_current_attempt['question_ids'] and fill_blanks_current_attempt['current_question'] == 0:
-        attempted_questions = ListeningFillBlanksSubmit.objects.filter(student=request.user).values_list('question_blank_id', flat=True)
+        attempted_questions = ListeningFillBlanksSubmit.objects.filter(student=request.user).values_list(
+            'question_blank_id', flat=True)
 
         available_questions = ListeningFillBlanks.objects.exclude(id__in=attempted_questions)
 
@@ -514,6 +518,7 @@ def evaluate_answers(user_answers, correct_answers):
             score += 1
     return score
 
+
 def fill_in_blank_submit(request):
     if request.method == "POST":
         session_data = request.session.get('fill_blanks_current_attempt', {})
@@ -524,7 +529,6 @@ def fill_in_blank_submit(request):
 
         current_q_index = session_data['current_question']
         question_id = request.POST.get('question_id')
-
 
         try:
             question = ListeningFillBlanks.objects.get(id=question_id)
@@ -565,7 +569,8 @@ def fill_in_blank_submit(request):
 
     return redirect('aspirant_test')
 
-#---------------l_mcq_single_start---------------
+
+# ---------------l_mcq_single_start---------------
 
 def l_mcq_single_test(request):
     if 'l_mcq_single' not in request.session:
@@ -587,7 +592,8 @@ def l_mcq_single_test(request):
 
     # Select new questions if starting fresh
     if not listen_l_mcq_single['question_ids'] and listen_l_mcq_single['current_question'] == 0:
-        attempted_questions = ListeningMCQSingleSubmit.objects.filter(student=request.user).values_list('Single_listen_id', flat=True)
+        attempted_questions = ListeningMCQSingleSubmit.objects.filter(student=request.user).values_list(
+            'Single_listen_id', flat=True)
         available_questions = ListeningMCQSingle.objects.exclude(id__in=attempted_questions)
 
         if available_questions.count() < 3:
@@ -673,8 +679,7 @@ def l_mcq_single_test_submit(request):
     return redirect('aspirant_test')
 
 
-
-#---------------------l_mcq_single_end--------------------
+# ---------------------l_mcq_single_end--------------------
 
 
 def r_mcq_single_test(request):
@@ -701,7 +706,7 @@ def r_mcq_single_test(request):
         random_question = random.choice(available_questions)
 
     request.session['last_question_id'] = random_question.id
-    
+
     context = {
         "passage": random_question.passage,
         "question": random_question.question,
@@ -746,7 +751,6 @@ def submit_mcq_single(request):
     return redirect(aspirant_test)
 
 
-
 def r_mcq_multiple_test(request):
     if 'MCQ_multiple' not in request.session:
         request.session['MCQ_multiple'] = 0
@@ -762,7 +766,8 @@ def r_mcq_multiple_test(request):
         return redirect('aspirant_test')
 
     # Get IDs of questions already attempted by the user
-    attempted_questions = MCQMultipleSubmit.objects.filter(student=request.user).values_list('Summarize_question_id', flat=True)
+    attempted_questions = MCQMultipleSubmit.objects.filter(student=request.user).values_list('Summarize_question_id',
+                                                                                             flat=True)
 
     # Filter questions that haven't been attempted
     available_questions = [q for q in questions if q.id not in attempted_questions]
@@ -775,7 +780,7 @@ def r_mcq_multiple_test(request):
     random_question = random.choice(available_questions)
 
     context = {
-        "passage_id":random_question.id,
+        "passage_id": random_question.id,
         "passage": random_question.passage,
         "question": random_question.question,
         "choices": [
@@ -827,6 +832,7 @@ def submit_mcq(request):
 
 
 '''---------Read_Aloud  Start---------'''
+
 
 def s_read_aloud_test(request):
     # Check maximum attempts first
@@ -881,10 +887,6 @@ def s_read_aloud_test(request):
     return render(request, 's_read_aloud_test.html', context)
 
 
-
-
-
-
 def count_mistakes(original, user_input):
     """Compares the original sentence with user input and determines the score based on 55% accuracy."""
     original_words = original.lower().split()
@@ -904,8 +906,6 @@ def count_mistakes(original, user_input):
     accuracy = (correct_words / total_words) * 100
 
     return 3 if accuracy >= 55 else 0  # Accept if accuracy is 55% or more
-
-
 
 
 def submit_text(request):
@@ -963,9 +963,7 @@ def submit_text(request):
     return redirect('aspirant_test')
 
 
-
 '''---------Read_Aloud  End---------'''
-
 
 '''-----------Short_Answer_Start------------'''
 
@@ -1049,7 +1047,7 @@ def short_answer_submit(request):
         user_text = request.POST.get('user_text', '').strip()
 
         # Validation
-        if not question_id :
+        if not question_id:
             messages.error(request, "Invalid submission.")
             return redirect('aspirant_test')
 
@@ -1095,6 +1093,8 @@ def short_answer_submit(request):
 
 
 '''-----------Summarize_passage_start------------'''
+
+
 def w_summarize_passage_test(request):
     if 'summarize_passage' not in request.session:
         request.session['summarize_passage'] = 0
@@ -1110,7 +1110,8 @@ def w_summarize_passage_test(request):
         return redirect('aspirant_test')
 
     # Get IDs of questions already attempted by the user
-    attempted_questions = SummarizePassageSubmit.objects.filter(student=request.user).values_list('Summarize_question_id', flat=True)
+    attempted_questions = SummarizePassageSubmit.objects.filter(student=request.user).values_list(
+        'Summarize_question_id', flat=True)
 
     # Filter questions that haven't been attempted
     available_questions = [q for q in questions if q.id not in attempted_questions]
@@ -1128,9 +1129,6 @@ def w_summarize_passage_test(request):
     }
 
     return render(request, "w_summarize_passage_test.html", context)
-
-
-
 
 
 def summarize_submit(request):
@@ -1156,10 +1154,13 @@ def summarize_submit(request):
 
     messages.success(request, "Your summary has been submitted successfully!")
     return redirect('aspirant_test')
+
+
 # Function to clean and split words
 def clean_and_split(text):
     text = re.sub(r'[^a-zA-Z0-9\s]', ' ', text)  # Remove special characters
     return text.lower().split()  # Convert to lowercase & split into words
+
 
 def process_summary(request, summarize_keyword, user_text):
     keywords = clean_and_split(summarize_keyword.keywords)
@@ -1190,19 +1191,18 @@ def process_summary(request, summarize_keyword, user_text):
     messages.success(request, "Summary submitted successfully!")
     return redirect('aspirant_test')
 
+
 '''-----------Summarize_passage_end------------'''
 
-
-
-
-
+@login_required(login_url='aspirant_login')
 def aspirant_result(request):
-    user = request.user # Calculate latest marks (same as before)
+    user = request.user  # Calculate latest marks (same as before)
+
     listening_fill_marks = sum(listening.mark for listening in ListeningFillBlanksSubmit.objects.filter(student=user))
     listening_mcq_marks = sum(listening.mark for listening in ListeningMCQSingleSubmit.objects.filter(student=user))
-    listening_summary_marks = sum(listening.mark for listening in ListeningCorrectSummarySubmit.objects.filter(student=user))
+    listening_summary_marks = sum(
+        listening.mark for listening in ListeningCorrectSummarySubmit.objects.filter(student=user))
     total_listening_marks = listening_fill_marks + listening_mcq_marks + listening_summary_marks
-    #print("Listening Marks:", total_listening_marks)
 
     speaking_loud = sum(read.mark for read in Read_aloud_submit.objects.filter(student=user))
     speaking_short = sum(read.mark for read in Short_answer_submit.objects.filter(student=user))
@@ -1210,25 +1210,71 @@ def aspirant_result(request):
 
     total_writing = sum(write.mark for write in SummarizePassageSubmit.objects.filter(student=user))
 
-    reading_single = ReadingTestResult.objects.get(student=user.first_name).mark
+    # Fix: Ensure reading_single is not None
+    reading_single = ReadingTestResult.objects.filter(student=user).first()
+    reading_single_mark = reading_single.mark if reading_single and reading_single.mark is not None else 0
+
     reading_multiple = sum(read.mark for read in MCQMultipleSubmit.objects.filter(student=user))
-    total_reading = reading_single + reading_multiple
-    print(reading_single)
+    total_reading = reading_single_mark + reading_multiple  # Fix applied here ✅
+
     grand_total = total_writing + total_reading + total_speaking + total_listening_marks
+    # Fetch answers with correct answers
+    # mcq_single_answers = ReadingMCQSingleTest.objects.filter(student=user)
+    # mcq_single_answers = ReadingMCQSingleTest.objects.filter(student=user.username)
+    mcq_multiple_answers = MCQMultipleSubmit.objects.filter(student=user)
+    fill_blank_answers = ListeningFillBlanksSubmit.objects.filter(student=user)
+
+    # Prepare data with correct answers
+    # mcq_single_data = [
+    #     {
+    #         "question": answer.question.question_text,
+    #         "user_answer": answer.answer,
+    #         "correct_answer": answer.question.correct_answer,
+    #     }
+    #     for answer in mcq_single_answers
+    # ]
+
+    mcq_multiple_data = [
+        {
+            # "question": answer.Summarize_question.question,
+            # "user_answer": answer.Summarize_question.correct_answer,
+            "user_answer": [
+                answer.Summarize_question.answer1,
+                answer.Summarize_question.answer2,
+                answer.Summarize_question.answer3
+            ],
+
+        }
+        for answer in mcq_multiple_answers
+    ]
+
+    fill_blank_data = [
+        {
+            # "question": answer.question_blank.passage,  # Correct field for passage
+            "user_answer": answer.mark,  # You stored marks as a score
+            "correct_answer": answer.question_blank.answers,  # Correct answers stored in JSONField
+        }
+        for answer in fill_blank_answers
+    ]
 
     existing_final = Final_Result.objects.filter(student=user).first()
     marks_changed = False
-    # Only create history if marks change
     if existing_final:
-        marks_changed = (existing_final.writing != total_writing or existing_final.reading != total_reading or existing_final.speaking != total_speaking or existing_final.listening != total_listening_marks )
-    if marks_changed:
-        ResultHistory.objects.create(student=user, writing=existing_final.writing,
-                                                   reading=existing_final.reading, speaking=existing_final.speaking,
-                                                   listening=existing_final.listening,
-                                                   total=grand_total,  # Use existing total, not new one
-                                                   attempted_on=now() )
+        marks_changed = (
+            existing_final.writing != total_writing or
+            existing_final.reading != total_reading or
+            existing_final.speaking != total_speaking or
+            existing_final.listening != total_listening_marks
+        )
 
-    # Update Final_Result (always keep latest marks)
+    if marks_changed:
+        ResultHistory.objects.create(
+            student=user, writing=existing_final.writing,
+            reading=existing_final.reading, speaking=existing_final.speaking,
+            listening=existing_final.listening,
+            attempted_on=now()
+        )
+
     final, created = Final_Result.objects.update_or_create(
         student=user,
         defaults={
@@ -1236,20 +1282,36 @@ def aspirant_result(request):
             "reading": total_reading,
             "speaking": total_speaking,
             "listening": total_listening_marks,
-            "total": grand_total, } )
-    # Show only the last attempt in history
+            "total": grand_total,
+        }
+    )
+
     previous_results = ResultHistory.objects.filter(student=user).order_by('-attempted_on')[:1]
+
     return render(request, "aspirant_result.html", {
         "aspirant_mark": final,
-        "previous_results": previous_results})
+        "previous_results": previous_results,
+        "mcq_multiple_data": mcq_multiple_data,
+        "fill_blank_data": fill_blank_data,
+    })
 
 
 def aspirant_test(request):
+    return render(request, "aspirant_test.html")
 
-    return render(request,"aspirant_test.html" )
 
+@login_required
 def grammar_checker(request):
-    return render(request, 'grammar_checker.html')
+    aspirant = AspirantReg.objects.filter(user=request.user).first()
+
+    if not aspirant:
+        messages.error(request, "Aspirant not found.")
+        return redirect('aspirant_login')  # Ensure correct redirection
+
+    return render(request, 'grammar_checker.html', {
+        'aspirant_id': aspirant.id  # ✅ Pass aspirant_id to the template
+    })
+
 
 
 

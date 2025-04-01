@@ -149,6 +149,82 @@
     <!-- Total Score Box -->
         <div class="score-box",style="background-color:--glass-color;">
             Your current total score is {{ aspirant_mark.total }}. Keep improving for better results!
+            <h3>Review Your Answers</h3>
+  <!-- MCQ Multiple Choice Review -->
+        <h4>MCQ Multiple Choice</h4>
+        {% if mcq_multiple_data %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Question No</th>
+<!--                    <th>Your Answer</th>-->
+                    <th>Correct Answer</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for answer in mcq_multiple_data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>  <!-- Question number -->
+<!--                 <td>{{ answer.question }}</td>-->
+
+<!--                    <td>{{ answer.Summarize_question.question }}</td>-->
+
+                    <td>{{ answer.user_answer }}</td>
+                    <td>
+                        {% if answer.user_answer == answer.correct_answer %}
+                            <span class="text-success">{{ answer.correct_answer }}</span>
+                        {% else %}
+                            <span class="text-danger">{{ answer.correct_answer }}</span>
+                        {% endif %}
+
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-center text-muted">No MCQ Multiple Choice answers available.</p>
+        {% endif %}
+
+        <!-- Fill in the Blanks Review -->
+        <h4>Fill in the Blanks</h4>
+        {% if fill_blank_data %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Question No</th>
+                   <th>No of Answers Correct</th>
+                    <th>Correct Answer</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for answer in fill_blank_data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>  <!-- Question number -->
+<!--                    <td>{{ answer.question }}</td>-->
+
+                    <td>{{ answer.user_answer }}</td>
+                    <td>
+<!--                        {% if answer.user_answer == answer.correct_answer %}-->
+<!--                            <span class="text-success">{{ answer.correct_answer }}</span>-->
+<!--                        {% else %}-->
+<!--                            <span class="text-danger">{{ answer.correct_answer }}</span>-->
+                             <br>
+                    <small class="text-success"> {{ answer.correct_answer }}</small>  <!-- Show correct answer below -->
+<!--                        {% endif %}-->
+                    </td>
+
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-center text-muted">No Fill in the Blanks answers available.</p>
+        {% endif %}
+
         </div>
     </div>
 <!--    </div> -->

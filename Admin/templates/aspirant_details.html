@@ -48,7 +48,7 @@
                         <th>Result</th>
                     </tr>
                 </thead>
-                <tbody>
+              <tbody>
                     {% for aspirant in aspirants %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
@@ -56,15 +56,14 @@
                         <td>{{ aspirant.reg_id }}</td>
                         <td>{{ aspirant.user.username }}</td>
                         <td>{{ aspirant.user.email }}</td>
-                        <td>
-                            <button class="btn btn-primary btn-lg active" onclick="window.location.href='{% url 'aspirant_result_full' %}';">
-                            Click
-                            </button>
-                        </td>
-
+                          <td>
+                        <a href="{% url 'aspirant_results' aspirant.id %}" class="btn btn-primary">
+                            <i class="bi bi-eye-fill"></i> View Result
+                        </a>
+                    </td>
                     </tr>
                     {% endfor %}
-                </tbody>
+        </tbody>
             </table>
         </div>
     </div>

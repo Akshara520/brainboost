@@ -57,6 +57,7 @@ urlpatterns = [
 
 
     path('aspirant_details/', aspirant_details, name='aspirant_details'),
-    path('aspirant_result/', aspirant_result_full, name='aspirant_result_full'),
-    path('admin/aspirant-results/', aspirant_results_admin, name='admin_aspirant_results'),
+    path('aspirants/<int:aspirant_id>/result/', aspirant_results, name='aspirant_results'),
+
+    # path('admin/aspirant-results/', aspirant_results_admin, name='admin_aspirant_results'),
 ]
